@@ -10,23 +10,16 @@ const port = process.env.PORT || 3001;
 const allowedOrigins = [
   'http://localhost:3000', // Local development (Create React App)
   'http://localhost:5173', // Local development (Vite default)
-  
-  // *** CRITICAL FIX FOR NETLIFY CORS ERROR ***
-  // Add the live, deployed Netlify URL
-  'https://faceoffportfolio.netlify.app', 
-  
-  // The Vercel URL you had previously included
+  'https://faceoffportfolio.netlify.app', // CRITICAL FIX FOR NETLIFY CORS ERROR
   'https://face-off-portfolio-or92szlf0-kimanis-projects-76482545.vercel.app',
 ];
 
 // Apply CORS middleware
-// app.use(cors({
-//   origin: allowedOrigins,
-//   methods: ['GET', 'POST'],
-//   allowedHeaders: ['Content-Type']
-// }));
-// WARNING: Revert this to the specific list of origins later.
-app.use(cors());
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type']
+}));
 
 app.use(express.json());
 
@@ -35,17 +28,20 @@ console.log('Environment variables:', {
   EMAIL_PASS: process.env.EMAIL_PASS ? '****' : 'Not set',
 });
 
+// --- UPDATED TRANSPORTER SETUP: Reverting to Port 587 (TLS) to bypass firewall blocks ---
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
-  port: 465,
-  secure: true, // Use TLS
+  port: 587,      // Revert to Port 587
+  secure: false,  // Set secure to false for Port 587 (TLS)
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  connectionTimeout: 60000, // Keep the longer timeout
   debug: true,
   logger: true,
 });
+// ------------------------------------------------------------------------------------------
 
 transporter.verify((error, success) => {
   if (error) {
