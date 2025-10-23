@@ -6,14 +6,22 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3001;
 
-// Allow CORS for local frontend
+// Define all the allowed frontend domains
+const allowedOrigins = [
+  'http://localhost:3000', // Local development (Create React App)
+  'http://localhost:5173', // Local development (Vite default)
+  
+  // *** CRITICAL FIX FOR NETLIFY CORS ERROR ***
+  // Add the live, deployed Netlify URL
+  'https://faceoffportfolio.netlify.app', 
+  
+  // The Vercel URL you had previously included
+  'https://face-off-portfolio-or92szlf0-kimanis-projects-76482545.vercel.app',
+];
+
+// Apply CORS middleware
 app.use(cors({
-  origin: [
-    'https://faceoffportfolio.netlify.app',
-    'http://localhost:3000', // Current frontend origin
-    'http://localhost:5173', // Vite default (in case it changes)
-    'https://face-off-portfolio-or92szlf0-kimanis-projects-76482545.vercel.app' // Deployed frontend
-  ],
+  origin: allowedOrigins,
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type']
 }));
