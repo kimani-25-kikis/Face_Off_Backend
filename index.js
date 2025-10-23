@@ -9,6 +9,7 @@ const port = process.env.PORT || 3001;
 // Allow CORS for local frontend
 app.use(cors({
   origin: [
+    'https://faceoffportfolio.netlify.app',
     'http://localhost:3000', // Current frontend origin
     'http://localhost:5173', // Vite default (in case it changes)
     'https://face-off-portfolio-or92szlf0-kimanis-projects-76482545.vercel.app' // Deployed frontend
