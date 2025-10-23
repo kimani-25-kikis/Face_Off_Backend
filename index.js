@@ -20,11 +20,13 @@ const allowedOrigins = [
 ];
 
 // Apply CORS middleware
-app.use(cors({
-  origin: allowedOrigins,
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type']
-}));
+// app.use(cors({
+//   origin: allowedOrigins,
+//   methods: ['GET', 'POST'],
+//   allowedHeaders: ['Content-Type']
+// }));
+// WARNING: Revert this to the specific list of origins later.
+app.use(cors());
 
 app.use(express.json());
 
@@ -36,7 +38,7 @@ console.log('Environment variables:', {
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
-  secure: true, 
+  secure: true, // Use TLS
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
